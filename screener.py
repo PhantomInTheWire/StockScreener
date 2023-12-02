@@ -9,11 +9,14 @@ st.title("Stock Screener")
 st.caption("By ~Karan Lokchandani")
 
 ticker = "MSFT"
-ticker = st.sidebar.text_input("Ticker")
 start_date = "05072005"
 end_date = "05012007"
-start_date = st.sidebar.date_input("Start Date")
-end_date = st.sidebar.date_input("End Date")
+
+if st.sidebar.text_input():
+    ticker = st.sidebar.text_input("Ticker")
+if st.sidebar.date_input():
+    start_date = st.sidebar.date_input("Start Date")
+    end_date = st.sidebar.date_input("End Date")
 
 data = yf.download(ticker, start=start_date, end=end_date)
 
