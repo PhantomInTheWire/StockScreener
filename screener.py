@@ -3,20 +3,17 @@ import yfinance as yf
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-
+import datetime
 
 st.title("Stock Screener")
 st.caption("By ~Karan Lokchandani")
 
-ticker = "MSFT"
-start_date = "05072005"
-end_date = "05012007"
+today = datetime.datetime(2023, 5, 17)
+lastyr = datetime.datetime(2022, 5, 17)
 
-if st.sidebar.text_input():
-    ticker = st.sidebar.text_input("Ticker")
-if st.sidebar.date_input():
-    start_date = st.sidebar.date_input("Start Date")
-    end_date = st.sidebar.date_input("End Date")
+ticker = st.sidebar.text_input("Ticker", "MSFT")
+start_date = st.sidebar.date_input("Start Date", lastyr)
+end_date = st.sidebar.date_input("End Date", today)
 
 data = yf.download(ticker, start=start_date, end=end_date)
 
