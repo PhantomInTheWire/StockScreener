@@ -5,6 +5,7 @@ import pandas as pd
 import plotly.express as px
 import datetime
 from alpha_vantage.fundamentaldata import FundamentalData
+from stocknews import StockNews
 
 st.title("Stock Screener")
 st.caption("By ~Karan Lokchandani")
@@ -38,4 +39,15 @@ with fundamentals_data:
     bs.columns = list(balance_sheet.T.iloc[0])
     st.write(bs)
 with news_data:
-    st.header('Top News')
+    st.header(f'Top News of {ticker}')
+    sn = StockNews(ticker, save_news=False)
+    df_news = sn.read_rss()
+    for i in range(10):
+        st.subheader(f'News {i+1}')
+        st.write(df_news['published'][i])
+        st.write(df_news['title'][i])
+        st.write(df_news['summary'][i])
+        t_sentiment = df_news['sentiment_title'][i]
+        st.write(f'Title Sentiment {t_sentiment}')
+        news_sentiment = df_news['sentiment_summary'][i]
+        st.write(f'News Sentiment {news_sentiment}')
