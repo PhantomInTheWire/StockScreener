@@ -30,7 +30,7 @@ with pricing_data:
     data2.dropna(inplace=True)
     st.write(data2)
 with fundamentals_data:
-    key = 'IW3G4PX8B3NTZQ16'
+    key = 'MXF7CUHFGALK25BE'
     fd = FundamentalData(key, output_format='pandas')
     st.subheader('Balance Sheet')
     balance_sheet = fd.get_balance_sheet_annual(ticker)[0]
