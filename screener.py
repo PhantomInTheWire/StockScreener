@@ -4,6 +4,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import datetime
+from alpha_vantage.fundamentaldata import FundamentalData
 
 st.title("Stock Screener")
 st.caption("By ~Karan Lokchandani")
@@ -29,6 +30,12 @@ with pricing_data:
     data2.dropna(inplace=True)
     st.write(data2)
 with fundamentals_data:
-    st.header('Fundamental Analysis')
+    key = 'CVAHFSF4GAPVA90Q'
+    fd = FundamentalData(key, output_format='pandas')
+    st.subheader('Balance Sheet')
+    balance_sheet = fd.get_balance_sheet_annual(ticker)[0]
+    bs = balance_sheet.T[2:]
+    bs.columns = list(balance_sheet.T.iloc[0])
+    st.write(bs)
 with news_data:
     st.header('Top News')
