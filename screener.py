@@ -1,4 +1,3 @@
-import numpy as np
 import yfinance as yf
 import streamlit as st
 import pandas as pd
@@ -18,7 +17,7 @@ start_date = st.sidebar.date_input("Start Date", lastyr)
 end_date = st.sidebar.date_input("End Date", today)
 
 data = yf.download(ticker, start=start_date, end=end_date)
-
+df = pd.DataFrame(ticker)
 fig = px.line(data, x=data.index, y=data['Adj Close'], title=ticker)
 st.plotly_chart(fig)
 
@@ -27,7 +26,7 @@ pricing_data, fundamentals_data, news_data = st.tabs(['Pricing', "Fundamentals",
 with pricing_data:
     st.header('Price Movement')
     data2 = data
-    data2['% change'] = data['Adj Close'] / data['Adj Close'].shift(1) -1
+    data2['% change'] = data['Adj Close'] / data['Adj Close'].shift(1) - 1
     data2.dropna(inplace=True)
     st.write(data2)
 with fundamentals_data:
@@ -43,7 +42,7 @@ with news_data:
     sn = StockNews(ticker, save_news=False)
     df_news = sn.read_rss()
     for i in range(10):
-        st.subheader(f'News {i+1}')
+        st.subheader(f'News {i + 1}')
         st.write(df_news['published'][i])
         st.write(df_news['title'][i])
         st.write(df_news['summary'][i])
