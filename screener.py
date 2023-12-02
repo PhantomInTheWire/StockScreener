@@ -29,6 +29,16 @@ with pricing_data:
     data2['% change'] = data['Adj Close'] / data['Adj Close'].shift(1) - 1
     data2.dropna(inplace=True)
     st.write(data2)
+<<<<<<< HEAD
+with fundamentals_data:
+    key = 'IW3G4PX8B3NTZQ16'
+    fd = FundamentalData(key, output_format='pandas')
+    st.subheader('Balance Sheet')
+    balance_sheet = fd.get_balance_sheet_annual(ticker)[0]
+    bs = balance_sheet.T[2:]
+    bs.columns = list(balance_sheet.T.iloc[0])
+    st.write(bs)
+=======
 
 keys = ['5V1CRKVRYYTBHJ4Q', 'ZCF8RV98AX0D83O2', 'CVAHFSF4GAPVA90Q', 'GDQQYIL2IY552KOQ', 'IW3G4PX8B3NTZQ16']
 
@@ -45,6 +55,7 @@ for key in keys:
         if key == keys[-1]:
             st.error("Failed to fetch data using all keys. Please check your keys.")
 
+>>>>>>> 2dda25efb05897fa8b5be969988660c45fdccffa
 with news_data:
     st.header(f'Top News of {ticker}')
     sn = StockNews(ticker, save_news=False)
