@@ -16,6 +16,15 @@ data = yf.download(ticker, start=start_date, end=end_date)
 fig = px.line(data, x=data.index, y=data['Adj Close'], title=ticker)
 st.plotly_chart(fig)
 
-pricing_data, fundamentals, news = st.tabs(['Pricing', "Fundamentals", "News"])
+pricing_data, fundamentals_data, news_data = st.tabs(['Pricing', "Fundamentals", "News"])
 
-
+with pricing_data:
+    st.header('Price Movement')
+    data2 = data
+    data2['% change'] = data['Adj Close'] / data['Adj Close'].shift(1) -1
+    data2.dropna(inplace=True)
+    st.write(data2)
+with fundamentals_data:
+    st.header('Fundamental Analysis')
+with news_data:
+    st.header('Top News')
