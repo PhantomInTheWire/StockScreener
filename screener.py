@@ -12,7 +12,7 @@ st.caption("By ~Karan and Shabbir")
 today = datetime.datetime(2023, 5, 17)
 lastyr = datetime.datetime(2022, 5, 17)
 
-ticker = st.sidebar.text_input("Ticker", "MSFT")
+ticker = st.sidebar.text_input("Ticker", "AAPL")
 start_date = st.sidebar.date_input("Start Date", lastyr)
 end_date = st.sidebar.date_input("End Date", today)
 
