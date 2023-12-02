@@ -7,7 +7,7 @@ from alpha_vantage.fundamentaldata import FundamentalData
 from stocknews import StockNews
 
 st.title("Stock Screener")
-st.caption("By ~Karan Lokchandani")
+st.caption("By ~Karan and Shabbir")
 
 today = datetime.datetime(2023, 5, 17)
 lastyr = datetime.datetime(2022, 5, 17)
@@ -29,14 +29,22 @@ with pricing_data:
     data2['% change'] = data['Adj Close'] / data['Adj Close'].shift(1) - 1
     data2.dropna(inplace=True)
     st.write(data2)
-with fundamentals_data:
-    key = '5V1CRKVRYYTBHJ4Q'
-    fd = FundamentalData(key, output_format='pandas')
-    st.subheader('Balance Sheet')
-    balance_sheet = fd.get_balance_sheet_annual(ticker)[0]
-    bs = balance_sheet.T[2:]
-    bs.columns = list(balance_sheet.T.iloc[0])
-    st.write(bs)
+
+keys = ['5V1CRKVRYYTBHJ4Q', 'ZCF8RV98AX0D83O2', 'CVAHFSF4GAPVA90Q', 'GDQQYIL2IY552KOQ', 'IW3G4PX8B3NTZQ16']
+
+for key in keys:
+    try:
+        fd = FundamentalData(key, output_format='pandas')
+        balance_sheet = fd.get_balance_sheet_annual(ticker)[0]
+        bs = balance_sheet.T[2:]
+        bs.columns = list(balance_sheet.T.iloc[0])
+        st.write(bs)
+        break
+    except Exception as e:
+        print(f"Failed to use key {key}. Error: {e}")
+        if key == keys[-1]:
+            st.error("Failed to fetch data using all keys. Please check your keys.")
+
 with news_data:
     st.header(f'Top News of {ticker}')
     sn = StockNews(ticker, save_news=False)
