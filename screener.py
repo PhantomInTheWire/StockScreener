@@ -16,9 +16,21 @@ ticker = st.sidebar.text_input("Ticker", "AAPL")
 start_date = st.sidebar.date_input("Start Date", lastyr)
 end_date = st.sidebar.date_input("End Date", today)
 
-data = yf.download(ticker, start=start_date, end=end_date)
 
-fig = px.line(data, x=data.index, y=data['Adj Close'], title=ticker)
+def get_data(t, start, end):
+    return yf.download(t, start=start, end=end)
+
+
+@st.cache_data
+def load_data(ticker, start, end):
+    data = get_data(ticker, start, end)
+    data['SMA'] = data['Adj Close'].rolling(window=50).mean()
+    return data
+
+
+data = load_data(ticker, start_date, end_date)
+
+fig = px.line(data, x=data.index, y=['Adj Close', 'SMA'], title=ticker)
 st.plotly_chart(fig)
 
 pricing_data, fundamentals_data, news_data = st.tabs(['Pricing', "Fundamentals", "News"])
@@ -29,6 +41,7 @@ with pricing_data:
     data2['% change'] = data['Adj Close'] / data['Adj Close'].shift(1) - 1
     data2.dropna(inplace=True)
     st.write(data2)
+
 with fundamentals_data:
     key = 'UAIT123S50BA4KFR'
     fd = FundamentalData(key, output_format='pandas')
@@ -37,6 +50,7 @@ with fundamentals_data:
     bs = balance_sheet.T[2:]
     bs.columns = list(balance_sheet.T.iloc[0])
     st.write(bs)
+
 with news_data:
     st.header(f'Top News of {ticker}')
     sn = StockNews(ticker, save_news=False)
