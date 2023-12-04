@@ -17,6 +17,7 @@ start_date = st.sidebar.date_input("Start Date", lastyr)
 end_date = st.sidebar.date_input("End Date", today)
 
 
+@st.cache_data
 def get_data(t, start, end):
     return yf.download(t, start=start, end=end)
 
