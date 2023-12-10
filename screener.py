@@ -7,7 +7,7 @@ from alpha_vantage.fundamentaldata import FundamentalData
 from stocknews import StockNews
 
 st.title("Stock Screener")
-st.caption("By ~Karan Lokchandani")
+st.caption("By ~Karan Lokchandani and team")
 
 today = datetime.datetime(2023, 5, 17)
 lastyr = datetime.datetime(2022, 5, 17)
