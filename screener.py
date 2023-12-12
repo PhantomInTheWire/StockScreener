@@ -3,33 +3,31 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import datetime
-from alpha_vantage.fundamentaldata import FundamentalData
 from stocknews import StockNews
+from financetoolkit import Toolkit
 
 st.title("Stock Screener")
 st.caption("By ~Karan Lokchandani and team")
 
-today = datetime.datetime(2023, 5, 17)
-lastyr = datetime.datetime(2022, 5, 17)
+today = datetime.date.today()
+lastyr = today - pd.DateOffset(years=3)
 
 ticker = st.sidebar.text_input("Ticker", "AAPL")
-start_date = st.sidebar.date_input("Start Date", lastyr)
-end_date = st.sidebar.date_input("End Date", today)
+s = st.sidebar.date_input("Start Date", lastyr)
+e = st.sidebar.date_input("End Date", today)
 
 
-@st.cache_data
 def get_data(t, start, end):
     return yf.download(t, start=start, end=end)
 
 
-@st.cache_data
 def load_data(ticker, start, end):
     data = get_data(ticker, start, end)
     data["SMA"] = data["Adj Close"].rolling(window=50).mean()
     return data
 
 
-data = load_data(ticker, start_date, end_date)
+data = load_data(ticker, s, e)
 
 fig = px.line(data, x=data.index, y=["Adj Close", "SMA"], title=ticker)
 st.plotly_chart(fig)
@@ -42,24 +40,20 @@ with pricing_data:
     data2["% change"] = data["Adj Close"] / data["Adj Close"].shift(1) - 1
     data2.dropna(inplace=True)
     st.write(data2)
+
 with fundamentals_data:
-    key = "UAIT123S50BA4KFR"
-    fd = FundamentalData(key, output_format="pandas")
+    st.header("Fundamentals")
     st.subheader("Balance Sheet")
-    balance_sheet = fd.get_balance_sheet_annual(ticker)[0]
-    bs = balance_sheet.T[2:]
-    bs.columns = list(balance_sheet.T.iloc[0])
-    st.write(bs)
+    company = Toolkit(ticker, api_key="w83etK9OOwP1dGc2uzAPtdZwntGWkAub", start_date=str(s), end_date=str(e))
+    x = company.get_balance_sheet_statement();
+    st.dataframe(x);
+
 with news_data:
     st.header(f"Top News of {ticker}")
-    sn = StockNews(ticker, save_news=False)
+    sn = StockNews(ticker, save_news=True)
     df_news = sn.read_rss()
-    for i in range(10):
+    for i in range(5):
         st.subheader(f"News {i + 1}")
         st.write(df_news["published"][i])
         st.write(df_news["title"][i])
         st.write(df_news["summary"][i])
-        t_sentiment = df_news["sentiment_title"][i]
-        st.write(f"Title Sentiment {t_sentiment}")
-        news_sentiment = df_news["sentiment_summary"][i]
-        st.write(f"News Sentiment {news_sentiment}")
