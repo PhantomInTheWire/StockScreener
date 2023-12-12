@@ -7,7 +7,7 @@ from stocknews import StockNews
 from financetoolkit import Toolkit
 
 st.title("Stock Screener")
-st.caption("By ~Karan Lokchandani and team")
+st.caption("~By Karan Lokchandani and team")
 
 today = datetime.date.today()
 old = today - pd.DateOffset(years=3)
@@ -44,7 +44,7 @@ with pricing_data:
 with fundamentals_data:
     st.header("Fundamentals")
     st.subheader("Balance Sheet")
-    company = Toolkit(ticker, api_key="w83etK9OOwP1dGc2uzAPtdZwntGWkAub", start_date=str(s), end_date=str(e))
+    company = Toolkit(ticker, api_key="4477b5317cf6d0a5dd7259eac446d1cd", start_date=str(s), end_date=str(e))
     x = company.get_balance_sheet_statement();
     st.dataframe(x);
 
