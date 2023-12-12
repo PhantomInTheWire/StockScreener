@@ -16,16 +16,16 @@ ticker = st.sidebar.text_input("Ticker", "AAPL")
 s = st.sidebar.date_input("Start Date", old)
 e = st.sidebar.date_input("End Date", today)
 
-
 def get_data(t, start, end):
     return yf.download(t, start=start, end=end)
-
 
 def load_data(ticker, start, end):
     data = get_data(ticker, start, end)
     data["SMA"] = data["Adj Close"].rolling(window=50).mean()
     return data
 
+def get_news(ticker):
+    return StockNews(ticker, save_news=True)
 
 data = load_data(ticker, s, e)
 
@@ -50,7 +50,7 @@ with fundamentals_data:
 
 with news_data:
     st.header(f"Top News of {ticker}")
-    sn = StockNews(ticker, save_news=True)
+    sn = get_news(ticker)
     df_news = sn.read_rss()
     for i in range(5):
         st.subheader(f"News {i + 1}")
