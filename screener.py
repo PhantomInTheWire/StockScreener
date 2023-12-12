@@ -10,10 +10,10 @@ st.title("Stock Screener")
 st.caption("By ~Karan Lokchandani and team")
 
 today = datetime.date.today()
-lastyr = today - pd.DateOffset(years=3)
+old = today - pd.DateOffset(years=3)
 
 ticker = st.sidebar.text_input("Ticker", "AAPL")
-s = st.sidebar.date_input("Start Date", lastyr)
+s = st.sidebar.date_input("Start Date", old)
 e = st.sidebar.date_input("End Date", today)
 
 
