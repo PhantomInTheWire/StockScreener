@@ -44,7 +44,7 @@ with pricing_data:
 with fundamentals_data:
     st.header("Fundamentals")
     st.subheader("Balance Sheet")
-    company = Toolkit(ticker, api_key="4477b5317cf6d0a5dd7259eac446d1cd", start_date=str(s), end_date=str(e))
+    company = Toolkit(ticker, api_key="WsJ2mX71xcPGvArmCIWvZxO9wxiCnB1C", start_date=str(s), end_date=str(e))
     x = company.get_balance_sheet_statement();
     st.dataframe(x);
 
