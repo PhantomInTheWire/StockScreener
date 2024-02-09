@@ -33,7 +33,6 @@ fig = px.line(data, x=data.index, y=["Adj Close", "SMA"], title=ticker)
 st.plotly_chart(fig)
 
 pricing_data, fundamentals_data, news_data = st.tabs(["Pricing", "Fundamentals", "News"])
-
 with pricing_data:
     st.header("Price Movement")
     data2 = data
